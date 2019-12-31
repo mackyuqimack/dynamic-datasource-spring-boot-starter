@@ -16,12 +16,11 @@
  */
 package com.baomidou.dynamic.datasource.strategy;
 
-import javax.sql.DataSource;
 import java.util.List;
+import javax.sql.DataSource;
 
 /**
- * 多数据源选择策略接口
- * 一般默认为负载均衡策略，默认提供了一个随机策略
+ * The interface of dynamic datasource switch strategy
  *
  * @author TaoYu Kanyuxia
  * @see RandomDynamicDataSourceStrategy
@@ -30,11 +29,11 @@ import java.util.List;
  */
 public interface DynamicDataSourceStrategy {
 
-    /**
-     * 决定当前数据源
-     *
-     * @param dataSources 数据源选择库
-     * @return dataSource 所选择的数据源
-     */
-    DataSource determineDataSource(List<DataSource> dataSources);
+  /**
+   * determine a database from the given dataSources
+   *
+   * @param dataSources given dataSources
+   * @return final dataSource
+   */
+  DataSource determineDataSource(List<DataSource> dataSources);
 }

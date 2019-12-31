@@ -28,42 +28,42 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * 动态数据源AOP织入
- *
  * @author TaoYu
  * @since 1.2.0
  */
-public class DynamicDataSourceAnnotationAdvisor extends AbstractPointcutAdvisor implements BeanFactoryAware {
+public class DynamicDataSourceAnnotationAdvisor extends AbstractPointcutAdvisor implements
+    BeanFactoryAware {
 
-    private Advice advice;
+  private Advice advice;
 
-    private Pointcut pointcut;
+  private Pointcut pointcut;
 
-    public DynamicDataSourceAnnotationAdvisor(@NonNull DynamicDataSourceAnnotationInterceptor dynamicDataSourceAnnotationInterceptor) {
-        this.advice = dynamicDataSourceAnnotationInterceptor;
-        this.pointcut = buildPointcut();
+  public DynamicDataSourceAnnotationAdvisor(
+      @NonNull DynamicDataSourceAnnotationInterceptor dynamicDataSourceAnnotationInterceptor) {
+    this.advice = dynamicDataSourceAnnotationInterceptor;
+    this.pointcut = buildPointcut();
+  }
+
+  @Override
+  public Pointcut getPointcut() {
+    return this.pointcut;
+  }
+
+  @Override
+  public Advice getAdvice() {
+    return this.advice;
+  }
+
+  @Override
+  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    if (this.advice instanceof BeanFactoryAware) {
+      ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
     }
+  }
 
-    @Override
-    public Pointcut getPointcut() {
-        return this.pointcut;
-    }
-
-    @Override
-    public Advice getAdvice() {
-        return this.advice;
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if (this.advice instanceof BeanFactoryAware) {
-            ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
-        }
-    }
-
-    private Pointcut buildPointcut() {
-        Pointcut cpc = new AnnotationMatchingPointcut(DS.class, true);
-        Pointcut mpc = AnnotationMatchingPointcut.forMethodAnnotation(DS.class);
-        return new ComposablePointcut(cpc).union(mpc);
-    }
+  private Pointcut buildPointcut() {
+    Pointcut cpc = new AnnotationMatchingPointcut(DS.class, true);
+    Pointcut mpc = AnnotationMatchingPointcut.forMethodAnnotation(DS.class);
+    return new ComposablePointcut(cpc).union(mpc);
+  }
 }
